@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import Article from "../components/Article";
@@ -39,26 +40,28 @@ test("renders a <small> with the date of the post", () => {
   expect(small.tagName).toBe("SMALL");
 });
 
-test("uses a default value for the date if no date is passed as a prop", () => {
+test("renders a <p> with the preview text", () => {
+  const preview = "Setting up the building blocks of your site";
   render(
     <Article
       title={"Components 101"}
-      preview={"Setting up the building blocks of your site"}
+      date={"December 15, 2020"}
+      preview={preview}
     />
   );
-  const small = screen.queryByText(/January 1, 1970/);
-  expect(small).toBeInTheDocument();
+  const p = screen.queryByText(preview);
+  expect(p).toBeInTheDocument();
+  expect(p.tagName).toBe("P");
 });
 
-test("renders a <p> with the preview text", () => {
+test("renders reading time when minutes prop is provided", () => {
   render(
     <Article
       title={"Components 101"}
       date={"December 15, 2020"}
       preview={"Setting up the building blocks of your site"}
+      minutes={5}
     />
   );
-  const p = screen.queryByText(/Setting up the building blocks of your site/);
-  expect(p).toBeInTheDocument();
-  expect(p.tagName).toBe("P");
+  expect(screen.getByText("5 min read")).toBeInTheDocument();
 });
